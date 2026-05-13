@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERP Student Lookup — Thapathali Campus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & tokens ─────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --navy-900: #0c1829;
+  --navy-800: #122238;
+  --navy-700: #1a3050;
+  --navy-600: #234069;
+  --navy-500: #2d5080;
+  --navy-100: #e8eef6;
+  --navy-50:  #f2f5f9;
+  --gold:     #c9a84c;
+  --gold-lt:  #e8d08a;
+  --cream:    #faf8f5;
+  --white:    #ffffff;
+  --gray-50:  #f8f9fa;
+  --gray-100: #f0f2f5;
+  --gray-200: #e2e6ec;
+  --gray-400: #9ba5b4;
+  --gray-500: #6b7a8d;
+  --text:     #1a2332;
+  --text-muted: #6b7a8d;
+  --text-light: #9ba5b4;
+  --green:    #16a34a;
+  --red:      #dc2626;
+  --r:   10px; --r-lg: 14px; --r-xl: 20px;
+  --shadow:    0 2px 8px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.05);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.14), 0 4px 12px rgba(0,0,0,.06);
+  --t: .18s cubic-bezier(.4,0,.2,1);
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--navy-900);
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ─────────────────────────────── */
+header {
+  background: var(--navy-800);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  padding: 0 28px; height: 62px;
+  display: flex; align-items: center; gap: 12px;
+  flex-shrink: 0;
+}
+
+.brand-badge {
+  width: 34px; height: 34px;
+  background: var(--gold); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  font-weight: 500; letter-spacing: .04em; color: var(--navy-900);
+}
+
+.brand-text h1  { font-size: 13px; font-weight: 700; color: #fff; }
+.brand-text p   { font-size: 10px; color: rgba(255,255,255,.4); font-weight: 500; letter-spacing: .04em; }
+
+.header-chip {
+  margin-left: auto;
+  background: rgba(201,168,76,.12);
+  border: 1px solid rgba(201,168,76,.22);
+  color: var(--gold);
+  font-size: 10.5px; font-weight: 700;
+  padding: 4px 12px; border-radius: 999px;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+
+/* ── Main content ───────────────────────── */
+main {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding: 48px 20px 60px;
+}
+
+/* ── Search card ────────────────────────── */
+.search-card {
+  background: var(--navy-800);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--r-xl);
+  padding: 40px 36px;
+  width: 100%; max-width: 540px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.4);
+}
+
+.search-card-title {
+  font-size: 22px; font-weight: 800; color: #fff;
+  margin-bottom: 6px; letter-spacing: .01em;
+}
+
+.search-card-sub {
+  font-size: 13px; color: rgba(255,255,255,.4);
+  margin-bottom: 28px; line-height: 1.6;
+}
+
+.input-group { position: relative; margin-bottom: 12px; }
+
+.crn-input {
+  width: 100%; padding: 14px 18px;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.12);
+  border-radius: var(--r); color: #fff;
+  font-family: 'DM Mono', monospace; font-size: 15px;
+  font-weight: 500; letter-spacing: .08em;
+  outline: none; text-transform: uppercase;
+  transition: border-color var(--t), background var(--t);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.crn-input::placeholder {
+  color: rgba(255,255,255,.2); font-size: 13px;
+  letter-spacing: .04em; font-family: 'Manrope', sans-serif; font-weight: 500;
+}
+
+.crn-input:focus {
+  border-color: var(--gold);
+  background: rgba(255,255,255,.10);
+}
+
+.crn-input.error { border-color: #f87171; }
+
+.hint {
+  font-size: 11px; color: rgba(255,255,255,.3);
+  margin-bottom: 20px; font-family: 'DM Mono', monospace;
+  letter-spacing: .04em;
+}
+
+.search-btn {
+  width: 100%; padding: 14px;
+  background: var(--gold); border: none; border-radius: var(--r);
+  color: var(--navy-900); font-family: 'Manrope', sans-serif;
+  font-size: 14px; font-weight: 700; letter-spacing: .02em;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 8px;
+  transition: background var(--t), transform var(--t), box-shadow var(--t);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.search-btn:hover  { background: var(--gold-lt); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,.3); }
+.search-btn:active { transform: translateY(0); }
+.search-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* spinner inside button */
+.btn-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(30,48,80,.3);
+  border-top-color: var(--navy-900);
+  border-radius: 50%; animation: spin .65s linear infinite;
+  display: none;
+}
+.search-btn.loading .btn-spinner { display: block; }
+.search-btn.loading .btn-text    { display: none; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Inline error under input ───────────── */
+.inline-error {
+  font-size: 12px; color: #f87171;
+  margin-top: -6px; margin-bottom: 14px;
+  display: none;
+}
+.inline-error.show { display: block; }
+
+/* ── Result area ────────────────────────── */
+#resultArea {
+  width: 100%; max-width: 700px;
+  margin-top: 28px;
+}
+
+/* ── Error banner ───────────────────────── */
+.error-banner {
+  background: rgba(220,38,38,.1);
+  border: 1px solid rgba(220,38,38,.25);
+  border-radius: var(--r-lg); padding: 16px 20px;
+  display: flex; align-items: flex-start; gap: 12px;
+  color: #fca5a5; font-size: 13.5px; line-height: 1.6;
+  display: none;
+}
+.error-banner.show { display: flex; }
+.error-banner svg  { flex-shrink: 0; margin-top: 1px; opacity: .8; }
+
+/* ── Student result card ────────────────── */
+.result-card {
+  background: var(--white);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: slideUp .28s cubic-bezier(.34,1.4,.64,1) both;
+  display: none;
+}
+.result-card.show { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Card header strip */
+.card-header {
+  background: var(--navy-800); padding: 16px 22px;
+  display: flex; align-items: center; gap: 14px;
+}
+
+.card-hdr-icon {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,.1); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-hdr-name {
+  font-size: 17px; font-weight: 800; color: #fff;
+  letter-spacing: .01em; flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.card-hdr-prog {
+  font-size: 11px; color: var(--gold-lt);
+  font-weight: 500; margin-top: 2px;
+}
+
+/* CRN badge top right */
+.crn-badge {
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  font-weight: 500; background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  color: var(--gold); padding: 5px 12px; border-radius: 6px;
+  letter-spacing: .06em; flex-shrink: 0;
+}
+
+/* Card body */
+.card-body {
+  display: flex;
+}
+
+/* Photo column */
+.photo-col {
+  width: 200px; flex-shrink: 0;
+  background: var(--gray-50);
+  border-right: 1px solid var(--gray-200);
+  display: flex; flex-direction: column;
+}
+
+.photo-wrap {
+  flex: 1; overflow: hidden;
+  background: linear-gradient(135deg, var(--navy-50), var(--gray-100));
+}
+
+.student-photo {
+  width: 100%; height: 100%; min-height: 240px;
+  object-fit: cover; object-position: top 5%;
+  display: block;
+}
+
+.no-photo {
+  width: 100%; min-height: 240px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; color: var(--gray-400);
+}
+
+.no-photo span {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-light);
+}
+
+/* source chip below photo */
+.source-chip {
+  padding: 9px 12px; text-align: center;
+  border-top: 1px solid var(--gray-200);
+}
+
+.source-chip span {
+  font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-light);
+}
+
+.source-chip strong {
+  display: block; font-size: 10.5px;
+  color: var(--green); font-weight: 700;
+  letter-spacing: .04em; margin-top: 1px;
+}
+
+/* Details column */
+.details-col {
+  flex: 1; padding: 20px 24px;
+  overflow-y: auto;
+}
+
+.detail-row {
+  display: flex; align-items: baseline;
+  gap: 12px; padding: 9px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+.detail-row:last-child { border-bottom: none; }
+
+.detail-lbl {
+  font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-light); width: 100px; flex-shrink: 0;
+}
+
+.detail-val {
+  font-size: 13.5px; font-weight: 600;
+  color: var(--text); flex: 1; word-break: break-word;
+}
+
+.detail-val.mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px; font-weight: 400;
+}
+
+.sep { height: 1px; background: var(--gray-200); margin: 6px 0 14px; }
+
+/* ERP live badge */
+.live-indicator {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; color: var(--green);
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 999px;
+  background: rgba(22,163,74,.08);
+  border: 1px solid rgba(22,163,74,.18);
+  margin-left: auto; flex-shrink: 0;
+}
+
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .35; }
+}
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 640px) {
+  header { padding: 0 16px; }
+  main   { padding: 28px 14px 50px; }
+
+  .search-card { padding: 28px 20px; }
+  .search-card-title { font-size: 19px; }
+
+  .card-body { flex-direction: column; }
+
+  .photo-col {
+    width: 100%; flex-direction: row;
+    height: 150px; border-right: none;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .photo-wrap    { width: 120px; flex-shrink: 0; }
+  .student-photo { min-height: 0; height: 100%; }
+  .no-photo      { min-height: 0; height: 100%; }
+
+  .source-chip {
+    flex: 1; border-top: none;
+    border-left: 1px solid var(--gray-200);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+
+  .details-col { padding: 14px 16px; }
+  .detail-lbl  { width: 84px; font-size: 9px; }
+  .detail-val  { font-size: 12.5px; }
+
+  .card-hdr-name  { font-size: 15px; }
+  .crn-badge      { font-size: 11px; padding: 4px 10px; }
+}
+
+@media (max-width: 380px) {
+  .photo-col { height: 130px; }
+  .photo-wrap { width: 100px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="brand-badge">THA</div>
+  <div class="brand-text">
+    <h1>Thapathali Campus — ERP Lookup</h1>
+    <p>LIVE · IOE · TRIBHUVAN UNIVERSITY</p>
+  </div>
+  <span class="header-chip">Real-time ERP</span>
+</header>
+
+<!-- ── Main ── -->
+<main>
+
+  <!-- Search card -->
+  <div class="search-card">
+    <h2 class="search-card-title">Student Lookup</h2>
+    <p class="search-card-sub">
+      Enter a Class Roll Number to fetch live data directly<br>
+      from the campus ERP — no local database involved.
+    </p>
+
+    <div class="input-group">
+      <input
+        class="crn-input"
+        id="crnInput"
+        type="text"
+        maxlength="13"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="e.g.  THA079BCT001"
+      >
+    </div>
+
+    <p class="inline-error" id="inlineError"></p>
+    <p class="hint">Format: THA &thinsp;+&thinsp; 3-digit year &thinsp;+&thinsp; program &thinsp;+&thinsp; 3-digit roll</p>
+
+    <button class="search-btn" id="searchBtn">
+      <div class="btn-spinner"></div>
+      <span class="btn-text">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:4px">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        Search ERP
+      </span>
+    </button>
+  </div>
+
+  <!-- Result area -->
+  <div id="resultArea">
+
+    <!-- Error banner -->
+    <div class="error-banner" id="errorBanner">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+      </svg>
+      <span id="errorText"></span>
+    </div>
+
+    <!-- Student result card -->
+    <div class="result-card" id="resultCard">
+
+      <div class="card-header">
+        <div class="card-hdr-icon">
+          <svg width="20" height="20" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div class="card-hdr-name" id="rName">—</div>
+          <div class="card-hdr-prog" id="rProg">—</div>
+        </div>
+        <span class="live-indicator">
+          <span class="live-dot"></span>
+          Live ERP
+        </span>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Photo -->
+        <div class="photo-col">
+          <div class="photo-wrap" id="rPhotoWrap">
+            <div class="no-photo">
+              <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" opacity=".3">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>No Photo</span>
+            </div>
+          </div>
+          <div class="source-chip">
+            <span>Data source</span>
+            <strong>ERP · TCIOE</strong>
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div class="details-col">
+
+          <div class="detail-row">
+            <span class="detail-lbl">CRN</span>
+            <span class="detail-val mono" id="rCRN">—</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-lbl">Full Name</span>
+            <span class="detail-val" id="rFullName">—</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-lbl">Program</span>
+            <span class="detail-val" id="rProgram">—</span>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="detail-row">
+            <span class="detail-lbl">Date of Birth</span>
+            <span class="detail-val mono" id="rDOB">—</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-lbl">Address</span>
+            <span class="detail-val" id="rAddress">—</span>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="detail-row">
+            <span class="detail-lbl">Contact No.</span>
+            <span class="detail-val mono" id="rContact">—</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-lbl">Citizenship</span>
+            <span class="detail-val mono" id="rCitizenship">—</span>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /result-card -->
+
+  </div><!-- /resultArea -->
+
+</main>
+
+<script>
+'use strict';
+
+const crnInput    = document.getElementById('crnInput');
+const searchBtn   = document.getElementById('searchBtn');
+const inlineError = document.getElementById('inlineError');
+const errorBanner = document.getElementById('errorBanner');
+const errorText   = document.getElementById('errorText');
+const resultCard  = document.getElementById('resultCard');
+
+const CRN_RE = /^THA\d{3}[A-Z]{2,3}\d{3}$/;
+
+/* ── Helpers ──────────────────────────── */
+function setLoading(on) {
+  searchBtn.classList.toggle('loading', on);
+  searchBtn.disabled = on;
+  crnInput.disabled  = on;
+}
+
+function showError(msg) {
+  errorText.textContent = msg;
+  errorBanner.classList.add('show');
+  resultCard.classList.remove('show');
+}
+
+function hideError() {
+  errorBanner.classList.remove('show');
+}
+
+function showInlineError(msg) {
+  inlineError.textContent = msg;
+  inlineError.classList.add('show');
+  crnInput.classList.add('error');
+}
+
+function clearInlineError() {
+  inlineError.classList.remove('show');
+  crnInput.classList.remove('error');
+}
+
+function formatName(name) {
+  if (!name) return '—';
+  return name.replace(/\s+/g, ' ').split(' ')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(' ');
+}
+
+/* ── Fill result card ─────────────────── */
+function fillCard(data) {
+  const name = formatName(data.name || '');
+
+  document.getElementById('rName').textContent      = name || '—';
+  document.getElementById('rProg').textContent      = (data.program || '').split('–')[0].trim() || '—';
+  document.getElementById('rCRN').textContent       = data.crn       || '—';
+  document.getElementById('rFullName').textContent  = name           || '—';
+  document.getElementById('rProgram').textContent   = data.program   || '—';
+  document.getElementById('rDOB').textContent       = data.dob       || '—';
+  document.getElementById('rAddress').textContent   = data.address   || '—';
+  document.getElementById('rContact').textContent   = data.contact   || '—';
+  document.getElementById('rCitizenship').textContent = data.citizenship || '—';
+
+  /* Photo — proxied through /api/photo to avoid CORS */
+  const photoWrap = document.getElementById('rPhotoWrap');
+  if (data.photo_url) {
+    const proxyUrl = `/api/photo?url=${encodeURIComponent(data.photo_url)}`;
+    photoWrap.innerHTML = `
+      <img class="student-photo" src="${proxyUrl}" alt="${name}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="no-photo" style="display:none">
+        <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" opacity=".3">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>No Photo</span>
+      </div>`;
+  } else {
+    photoWrap.innerHTML = `
+      <div class="no-photo">
+        <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" opacity=".3">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>No Photo</span>
+      </div>`;
+  }
+
+  hideError();
+  /* Re-trigger animation each time a new result loads */
+  resultCard.classList.remove('show');
+  void resultCard.offsetWidth;   // force reflow
+  resultCard.classList.add('show');
+}
+
+/* ── Search ───────────────────────────── */
+async function doSearch() {
+  const crn = crnInput.value.trim().toUpperCase();
+
+  /* Client-side validation first */
+  clearInlineError();
+  if (!crn) { showInlineError('Please enter a CRN.'); return; }
+  if (!CRN_RE.test(crn)) {
+    showInlineError('Invalid format — expected something like THA079BCT001');
+    return;
+  }
+
+  setLoading(true);
+  hideError();
+  resultCard.classList.remove('show');
+
+  try {
+    const res = await fetch('/api/search', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ crn }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      showError(data.error || `Server returned ${res.status}.`);
+    } else {
+      fillCard(data);
+    }
+
+  } catch (err) {
+    showError('Could not reach the lookup server. Make sure app.py is running.');
+  } finally {
+    setLoading(false);
+  }
+}
+
+/* ── Events ───────────────────────────── */
+searchBtn.addEventListener('click', doSearch);
+
+crnInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+
+/* Auto-uppercase and format as user types */
+crnInput.addEventListener('input', () => {
+  const pos = crnInput.selectionStart;
+  crnInput.value = crnInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  crnInput.setSelectionRange(pos, pos);
+  clearInlineError();
+});
+</script>
+</body>
+</html>
